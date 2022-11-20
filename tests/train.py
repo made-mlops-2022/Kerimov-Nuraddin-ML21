@@ -8,5 +8,6 @@ class TestTrain(unittest.TestCase):
         train()
         self.assertTrue(os.path.exists('./models/model.pkl'))
 
+
 if __name__ == "__main__":
     unittest.main()

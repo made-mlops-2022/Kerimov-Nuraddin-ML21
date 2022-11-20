@@ -1,10 +1,7 @@
 import logging
 import os
-import sys
-from pathlib import Path
 import json
 import sys
-import pandas as pd
 from ml_example.data.make_dataset import download_data, split_train_val_data, read_data
 from ml_example.enities.train_pipeline_params import TrainingPipelineParams
 
@@ -29,38 +26,24 @@ logger = logging.getLogger(__name__)
 handler = logging.StreamHandler(sys.stdout)
 logger.setLevel(logging.INFO)
 logger.addHandler(handler)
-conf_file_name = 'train_config' #изменяется в main от консольного параметра!!
-
-# def train_pipeline(config_path: str):
-#     #training_pipeline_params = read_training_pipeline_params(config_path)
-
-#     # if training_pipeline_params.use_mlflow:
-
-#     #     mlflow.set_tracking_uri(training_pipeline_params.mlflow_uri)
-#     #     mlflow.set_experiment(training_pipeline_params.mlflow_experiment)
-#     #     with mlflow.start_run():
-#     #         mlflow.log_artifact(config_path)
-#     #         model_path, metrics = run_train_pipeline(training_pipeline_params)
-#     #         mlflow.log_metrics(metrics)
-#     #         mlflow.log_artifact(model_path)
-#     # else:
-#     #     return run_train_pipeline(training_pipeline_params)
-
-
-# def run_train_pipeline(training_pipeline_params):
-#     # downloading_params = training_pipeline_params.downloading_params
-#     # if downloading_params:
-#     #     os.makedirs(downloading_params.output_folder, exist_ok=True)
-#     #     for path in downloading_params.paths:
-#     #         download_data(
-#     #             downloading_params.s3_bucket,
-#     #             path,
-#     #             os.path.join(downloading_params.output_folder, Path(path).name),
-#     #         )
+conf_file_name = 'train_config'  # изменяется в main от консольного параметра!!
 
 
 @hydra.main(version_base=None, config_path="../configs", config_name='train_config_catboost',)
-def train(config: TrainingPipelineParams)->None:
+def main(config: TrainingPipelineParams):
+    if config.use_mlflow:
+        mlflow.set_tracking_uri(config.mlflow_uri)
+        mlflow.set_experiment(config.mlflow_experiment)
+        with mlflow.start_run():
+            mlflow.log_artifact('./outputs')
+            model_path, metrics = train(config)
+            mlflow.log_metrics(metrics)
+            mlflow.log_artifact(model_path)
+    else:
+        return train(config)
+
+
+def train(config: TrainingPipelineParams) -> None:
     logger.info("Starting pipeline")
     logger.info(f"configs: {config}")
     input_data_path = config.input_data_path
@@ -123,8 +106,8 @@ def train(config: TrainingPipelineParams)->None:
     path_to_model = serialize_model(
         inference_pipeline, config.output_model_path
     )
-
+    return path_to_model, metrics
 
 
 if __name__ == "__main__":
-    train()
+    main()

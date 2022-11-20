@@ -16,10 +16,8 @@ class TrainingPipelineParams:
     splitting_params: SplittingParams
     feature_params: FeatureParams
     train_params: TrainingParams
-    downloading_params: DownloadParams 
+    downloading_params: DownloadParams
     download_data: bool = True
     use_mlflow: bool = False
     mlflow_uri: str = "http://18.156.5.226/"
     mlflow_experiment: str = "inference_demo"
-    
-

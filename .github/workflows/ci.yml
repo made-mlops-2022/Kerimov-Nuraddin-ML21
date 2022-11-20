@@ -12,7 +12,7 @@ jobs:
       - name: Install requirements
         run: pip3 install -r requirements.txt
       - name: Linter
-        run: flake8 --ignore=E501,W291,E226,W504 ./ 
+        run: flake8 --ignore=E501,W291,E226,W504,F541,F401 ./
       - name: Tests
         run: python -m pytest tests
       - name: Test train

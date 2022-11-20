@@ -39,15 +39,17 @@ def build_numerical_pipeline() -> Pipeline:
 def make_features(transformer: ColumnTransformer, df: pd.DataFrame) -> pd.DataFrame:
     return transformer.transform(df)
 
+
 class Catboost_transform():
     def fit(self, X, y=None):
         return self
 
-    def transform(Self, X, y = None):
+    def transform(Self, X, y=None):
         return X
 
+
 def build_transformer(params: FeatureParams) -> ColumnTransformer:
-    if params.for_catboost: # catboost сделает всё сам
+    if params.for_catboost:  # catboost сделает всё сам
         transformer = Catboost_transform()
     else:
         transformer = ColumnTransformer(

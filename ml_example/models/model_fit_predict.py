@@ -13,17 +13,16 @@ from catboost import Pool
 from catboost import CatBoostClassifier
 
 
-
 def train_model(
-    features: pd.DataFrame, target: pd.Series,val_features:pd.DataFrame, val_target: pd.Series, train_params: TrainingParams):
+        features: pd.DataFrame, target: pd.Series, val_features: pd.DataFrame, val_target: pd.Series, train_params: TrainingParams):
     if train_params.model_type == "CatBoostClassifier":
-        
+
         model = CatBoostClassifier(
-        iterations=train_params.iterations,
-        random_seed=train_params.random_seed,
-        learning_rate=train_params.learning_rate,
-        custom_loss=train_params.custom_loss,
-        use_best_model=train_params.use_best_model
+            iterations=train_params.iterations,
+            random_seed=train_params.random_seed,
+            learning_rate=train_params.learning_rate,
+            custom_loss=train_params.custom_loss,
+            use_best_model=train_params.use_best_model
         )
 
         model.fit(
@@ -52,7 +51,8 @@ def predict_model(
 def evaluate_model(
     predicts: np.ndarray, target: pd.Series
 ) -> Dict[str, float]:
-    pr, rec, f1,_ =precision_recall_fscore_support(target,predicts,average= 'binary')
+    pr, rec, f1, _ = precision_recall_fscore_support(
+        target, predicts, average='binary')
     return {
         "precision": pr,
         "recall": rec,
@@ -71,7 +71,8 @@ def serialize_model(model: object, output: str) -> str:
         pickle.dump(model, f)
     return output
 
-def load_model(model_path:str) -> Pipeline:
+
+def load_model(model_path: str) -> Pipeline:
     with open(model_path, "rb") as f:
         model = pickle.load(f)
     return model
