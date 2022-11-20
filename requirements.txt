@@ -14,5 +14,4 @@ matplotlib-inline
 seaborn
 sklearn
 hydra-core
-mlflow
 pytest
