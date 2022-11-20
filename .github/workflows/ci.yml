@@ -20,4 +20,4 @@ jobs:
       - name: Tests
         run: python -m pytest tests
       - name: Test train
-        run: python -m ml_example.tests.train
+        run: python -m tests.train
