@@ -4,54 +4,64 @@ from typing import Dict, Union
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
+from sklearn.metrics import precision_recall_fscore_support
 from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
 
 from ml_example.enities.train_params import TrainingParams
+from catboost import Pool
+from catboost import CatBoostClassifier
 
-SklearnRegressionModel = Union[RandomForestRegressor, LinearRegression]
 
 
 def train_model(
-    features: pd.DataFrame, target: pd.Series, train_params: TrainingParams
-) -> SklearnRegressionModel:
-    if train_params.model_type == "RandomForestRegressor":
-        model = RandomForestRegressor(
-            n_estimators=100, random_state=train_params.random_state
+    features: pd.DataFrame, target: pd.Series,val_features:pd.DataFrame, val_target: pd.Series, train_params: TrainingParams):
+    if train_params.model_type == "CatBoostClassifier":
+        
+        model = CatBoostClassifier(
+        iterations=train_params.iterations,
+        random_seed=train_params.random_seed,
+        learning_rate=train_params.learning_rate,
+        custom_loss=train_params.custom_loss,
+        use_best_model=train_params.use_best_model
         )
-    elif train_params.model_type == "LinearRegression":
-        model = LinearRegression()
+
+        model.fit(
+            features, target,
+            cat_features=train_params.cat_features,
+            eval_set=(val_features, val_target),
+            verbose=True,
+        )
+    elif train_params.model_type == 'LogisticRegression':
+        model = LogisticRegression()
+        model.fit(
+            features, target
+        )
     else:
         raise NotImplementedError()
-    model.fit(features, target)
     return model
 
 
 def predict_model(
-    model: Pipeline, features: pd.DataFrame, use_log_trick: bool = True
+    model: Pipeline, features: pd.DataFrame
 ) -> np.ndarray:
     predicts = model.predict(features)
-    if use_log_trick:
-        predicts = np.exp(predicts)
     return predicts
 
 
 def evaluate_model(
-    predicts: np.ndarray, target: pd.Series, use_log_trick: bool = False
+    predicts: np.ndarray, target: pd.Series
 ) -> Dict[str, float]:
-    if use_log_trick:
-        target = np.exp(target)
+    pr, rec, f1,_ =precision_recall_fscore_support(target,predicts,average= 'binary')
     return {
-        "r2_score": r2_score(target, predicts),
-        "rmse": mean_squared_error(target, predicts, squared=False),
-        "mae": mean_absolute_error(target, predicts),
+        "precision": pr,
+        "recall": rec,
+        "f1": f1
     }
 
 
 def create_inference_pipeline(
-    model: SklearnRegressionModel, transformer: ColumnTransformer
+    model, transformer: ColumnTransformer
 ) -> Pipeline:
     return Pipeline([("feature_part", transformer), ("model_part", model)])
 
@@ -60,3 +70,8 @@ def serialize_model(model: object, output: str) -> str:
     with open(output, "wb") as f:
         pickle.dump(model, f)
     return output
+
+def load_model(model_path:str) -> Pipeline:
+    with open(model_path, "rb") as f:
+        model = pickle.load(f)
+    return model

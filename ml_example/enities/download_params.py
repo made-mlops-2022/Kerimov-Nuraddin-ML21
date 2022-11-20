@@ -1,10 +1,10 @@
-from typing import List
-
-from dataclasses import dataclass, field
-
+from dataclasses import dataclass
 
 @dataclass()
-class DownloadParams:
-    paths: List[str]
-    output_folder: str
-    s3_bucket: str = field(default="for-dvc")
+class DownloadParams():
+    path: str = './data/raw'
+    csv: str = 'data.csv'
+    file_id: str = '1q2ehxJdWkP-ak84wIc6GWRhCC3bgSTC4'
+    zip_path: str = 'data.zip'
+    url: str = 'https://docs.google.com/uc?export=download'
+

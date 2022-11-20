@@ -31,7 +31,7 @@ def process_numerical_features(numerical_df: pd.DataFrame) -> pd.DataFrame:
 
 def build_numerical_pipeline() -> Pipeline:
     num_pipeline = Pipeline(
-        [("impute", SimpleImputer(missing_values=np.nan, strategy="mean")),]
+        [("impute", SimpleImputer(missing_values=np.nan, strategy="mean")), ]
     )
     return num_pipeline
 
@@ -39,27 +39,34 @@ def build_numerical_pipeline() -> Pipeline:
 def make_features(transformer: ColumnTransformer, df: pd.DataFrame) -> pd.DataFrame:
     return transformer.transform(df)
 
+class Catboost_transform():
+    def fit(self, X, y=None):
+        return self
+
+    def transform(Self, X, y = None):
+        return X
 
 def build_transformer(params: FeatureParams) -> ColumnTransformer:
-    transformer = ColumnTransformer(
-        [
-            (
-                "categorical_pipeline",
-                build_categorical_pipeline(),
-                params.categorical_features,
-            ),
-            (
-                "numerical_pipeline",
-                build_numerical_pipeline(),
-                params.numerical_features,
-            ),
-        ]
-    )
+    if params.for_catboost: # catboost сделает всё сам
+        transformer = Catboost_transform()
+    else:
+        transformer = ColumnTransformer(
+            [
+                (
+                    "categorical_pipeline",
+                    build_categorical_pipeline(),
+                    params.categorical_features,
+                ),
+                (
+                    "numerical_pipeline",
+                    build_numerical_pipeline(),
+                    params.numerical_features,
+                ),
+            ]
+        )
     return transformer
 
 
 def extract_target(df: pd.DataFrame, params: FeatureParams) -> pd.Series:
     target = df[params.target_col]
-    if params.use_log_trick:
-        target = pd.Series(np.log(target.to_numpy()))
     return target

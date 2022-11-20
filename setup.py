@@ -1,5 +1,8 @@
 from setuptools import find_packages, setup
 
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
+
 setup(
     name='src',
     packages=find_packages(),
@@ -7,4 +10,5 @@ setup(
     description='HW1 for MLops',
     author='Kerimov Nuraddin ML-21',
     license='MIT',
+    install_requires=required
 )

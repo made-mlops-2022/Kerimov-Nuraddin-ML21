@@ -2,12 +2,10 @@ from typing import Optional
 
 from dataclasses import dataclass
 
-from .download_params import DownloadParams
-from .split_params import SplittingParams
-from .feature_params import FeatureParams
-from .train_params import TrainingParams
-from marshmallow_dataclass import class_schema
-import yaml
+from ml_example.enities.download_params import DownloadParams
+from ml_example.enities.split_params import SplittingParams
+from ml_example.enities.feature_params import FeatureParams
+from ml_example.enities.train_params import TrainingParams
 
 
 @dataclass()
@@ -18,16 +16,10 @@ class TrainingPipelineParams:
     splitting_params: SplittingParams
     feature_params: FeatureParams
     train_params: TrainingParams
-    downloading_params: Optional[DownloadParams] = None
+    downloading_params: DownloadParams 
+    download_data: bool = True
     use_mlflow: bool = False
     mlflow_uri: str = "http://18.156.5.226/"
     mlflow_experiment: str = "inference_demo"
+    
 
-
-TrainingPipelineParamsSchema = class_schema(TrainingPipelineParams)
-
-
-def read_training_pipeline_params(path: str) -> TrainingPipelineParams:
-    with open(path, "r") as input_stream:
-        schema = TrainingPipelineParamsSchema()
-        return schema.load(yaml.safe_load(input_stream))
