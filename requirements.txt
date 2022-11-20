@@ -15,3 +15,4 @@ seaborn
 sklearn
 hydra-core
 pytest
+requests
