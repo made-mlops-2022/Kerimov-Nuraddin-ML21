@@ -12,7 +12,7 @@ jupyterlab-widgets
 matplotlib
 matplotlib-inline
 seaborn
-sklearn
+scikit-learn
 hydra-core
 pytest
 requests
