@@ -68,8 +68,8 @@ def split_train_val_data(
 
 def save_predicted_results(data: pd.DataFrame, predicts: np.array, output_path: str) -> None:
     data['predicted'] = predicts
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)
+    if not os.path.exists(output_path[:output_path.rfind('/')]):
+        os.makedirs(output_path[:output_path.rfind('/')])
     data.to_csv(output_path, index=False)
 
 
@@ -93,8 +93,8 @@ def generete_fake_data(path, samples) -> None:
     data['ca'] = np.random.randint(0, 3, size=samples)
     data['thal'] = np.random.randint(0, 2, size=samples)
     data['condition'] = np.random.randint(0, 1, size=samples)
-    if not os.path.exists(path):
-        os.makedirs(path)
+    if not os.path.exists(path[:path.rfind('/')]):
+        os.makedirs(path[:path.rfind('/')])
     data.to_csv(path, index=False)
 
 
