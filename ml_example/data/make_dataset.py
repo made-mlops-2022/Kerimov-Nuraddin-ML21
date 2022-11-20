@@ -8,6 +8,7 @@ import zipfile
 import pandas as pd
 import numpy as np
 import sys
+import os
 # https://stackoverflow.com/questions/38511444/python-download-files-from-google-drive-using-url
 
 
@@ -44,6 +45,8 @@ def save_response_content(response, destination: str) -> None:
 def download_data(cfg: DownloadParams) -> None:
     # данные лежат на гугл диске. Или брать тут kaggle datasets download -d cherngs/heart-disease-cleveland-uci
     # '1q2ehxJdWkP-ak84wIc6GWRhCC3bgSTC4'
+    if not os.path.exists(cfg.path):
+        os.makedirs(cfg.path)
     download_file_from_google_drive(
         cfg.file_id, cfg.path+'/'+cfg.zip_path, cfg.url)
     with zipfile.ZipFile(cfg.path+'/'+cfg.zip_path, 'r') as zip_ref:
