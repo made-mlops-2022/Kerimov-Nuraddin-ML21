@@ -15,4 +15,5 @@ jobs:
         run: flake8 --ignore=E501,W291,E226,W504 ./ 
       - name: Tests
         run: python -m pytest tests
+      - name: Test train
         run: python -m ml_example.tests.train

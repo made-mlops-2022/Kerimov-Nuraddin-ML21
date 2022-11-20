@@ -87,3 +87,9 @@ target/
 
 # Mypy cache
 .mypy_cache/
+models/*
+outputs/*
+tests/data/raw/*
+tests/res.csv
+
+!data\raw\heart_cleveland_upload*
