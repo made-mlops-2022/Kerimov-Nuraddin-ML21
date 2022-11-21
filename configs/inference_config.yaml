@@ -1,0 +1,13 @@
+train_data_params:
+  data_path: './online_inference/train_data'
+  data_name: 'heart_cleveland_upload.csv'
+  file_id: '1q2ehxJdWkP-ak84wIc6GWRhCC3bgSTC4'
+  zip_path: 'heart_cleveland_upload.csv'
+  url: 'https://docs.google.com/uc?export=download'
+download_params:
+  model_path: './online_inference/models'
+  model_name: 'model.pkl'
+  file_id: NULL
+  zip_path: 'data.zip'
+  url: 'https://docs.google.com/uc?export=download'
+need_download_model: True

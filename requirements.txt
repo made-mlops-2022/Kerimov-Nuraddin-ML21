@@ -16,3 +16,6 @@ scikit-learn
 hydra-core
 pytest
 requests
+httpx
+fastapi
+"uvicorn[standard]"
