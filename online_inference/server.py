@@ -3,12 +3,12 @@ from path import Path
 from fastapi import FastAPI, Response
 import pandas as pd
 import hydra
+import pickle
 import os
 from hydra.core.config_store import ConfigStore
 from online_inference.entities.input_data import InputData
 from online_inference.entities.inference_params import InferenceParams
 from online_inference.download_model import download_model
-from ml_example.models import load_model
 from online_inference.model_predict.predict import predict
 from online_inference.model_predict.validate import validate, load_train_data
 ins = ConfigStore.instance()
@@ -31,8 +31,8 @@ def startup_model():
         download_model(cfg.download_params)
     global model, model_ready
     #raise BaseException(f'{cfg.download_params.model_path}/{cfg.download_params.model_name}')
-    model = load_model(
-        f'{cfg.download_params.model_path}/{cfg.download_params.model_name}')
+    with open(f'{cfg.download_params.model_path}/{cfg.download_params.model_name}','rb') as f:
+        model = pickle.load(f)
     load_train_data(cfg.train_data_params)
     model_ready = True
 

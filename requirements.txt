@@ -17,5 +17,6 @@ hydra-core
 pytest
 requests
 httpx
+path
 fastapi
-"uvicorn[standard]"
+uvicorn[standard]

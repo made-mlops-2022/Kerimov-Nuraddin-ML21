@@ -1,0 +1,9 @@
+numpy
+pandas
+scikit-learn
+hydra-core
+path
+fastapi
+uvicorn[standard]
+requests
+catboost
