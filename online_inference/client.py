@@ -25,7 +25,7 @@ def main(path: str = None) -> None:
 ]"""
 
     if path is not None:
-        data = pd.read_csv(path)
+        data = str(pd.read_csv(path).to_dict('records'))
 
     resp = r.post('http://127.0.0.1:8000/predict', data)
 

@@ -20,7 +20,6 @@ app = FastAPI()
 
 
 model_ready = False
-os.environ['MLOPS_HW2_MODEL_FILE_ID'] = '1B1BvfrkKKimI0kTxYVgXwOMG3zHhsptC'
 
 
 @app.on_event("startup")
@@ -31,7 +30,7 @@ def startup_model():
         download_model(cfg.download_params)
     global model, model_ready
     #raise BaseException(f'{cfg.download_params.model_path}/{cfg.download_params.model_name}')
-    with open(f'{cfg.download_params.model_path}/{cfg.download_params.model_name}','rb') as f:
+    with open(f'{cfg.download_params.model_path}/{cfg.download_params.model_name}', 'rb') as f:
         model = pickle.load(f)
     load_train_data(cfg.train_data_params)
     model_ready = True
@@ -61,7 +60,7 @@ def predict_entrypoint(inp_data: List[InputData], response: Response):
         if valid_data is not None and valid_data.shape[0] > 0:
             valid_data = predict(model, valid_data)
             response.status_code = 200
-            return pd.concat([valid_data, non_valid_data]).to_dict('list')
+            return pd.concat([valid_data, non_valid_data]).to_dict('records')
         return "No valid data"
     return 'model isnt ready'
 

@@ -18,6 +18,6 @@ jobs:
       - name: basic run
         run: python -m ml_example.train --config-name=train_config_catboost
       - name: Tests
-        run: python -m pytest tests
+        run: python -m pytest
       - name: Test train
         run: python -m tests.train

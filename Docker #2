@@ -4,7 +4,7 @@ FROM python:3.10.8-slim-buster as base
 WORKDIR /app
 RUN python -m venv /app/venv && /app/venv/bin/pip install --no-cache-dir -U pip setuptools
 COPY requirements_docker.txt .
-RUN /app/venv/bin/pip install --no-cache-dir -r requirements_docker.txt && /app/venv/bin/pip uninstall -y plotly Pillow matplotlib pip
+RUN /app/venv/bin/pip install --no-cache-dir -r requirements_docker.txt 
 FROM python:3.10.8-slim-buster
 COPY --from=base /app /app
 WORKDIR /app

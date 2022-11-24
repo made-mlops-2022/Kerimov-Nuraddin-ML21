@@ -4,7 +4,6 @@ from typing import List
 from online_inference.entities.validate_params import ValidateParams
 from sklearn.ensemble import IsolationForest
 from online_inference.downloader import download_file_from_google_drive
-from ml_example.data.make_dataset import read_data
 import zipfile
 
 
@@ -21,7 +20,7 @@ def load_train_data(cfg: ValidateParams):
             zip_ref.extractall(cfg.data_path)
 
     global train_data, min_data, max_data, isol_forest
-    train_data = read_data(f'{cfg.data_path}/{cfg.data_name}')
+    train_data = pd.read_csv(f'{cfg.data_path}/{cfg.data_name}')
     max_data = train_data.drop(columns=['condition']).max()
     min_data = train_data.drop(columns=['condition']).min()
     isol_forest = IsolationForest(n_estimators=1000, contamination=0.001)
