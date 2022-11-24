@@ -29,7 +29,7 @@ def startup_model():
     if cfg.need_download_model or not Path(f'{cfg.download_params.model_path}/{cfg.download_params.model_name}').exists():
         download_model(cfg.download_params)
     global model, model_ready
-    #raise BaseException(f'{cfg.download_params.model_path}/{cfg.download_params.model_name}')
+    # raise BaseException(f'{cfg.download_params.model_path}/{cfg.download_params.model_name}')
     with open(f'{cfg.download_params.model_path}/{cfg.download_params.model_name}', 'rb') as f:
         model = pickle.load(f)
     load_train_data(cfg.train_data_params)
