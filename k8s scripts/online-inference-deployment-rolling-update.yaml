@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-deployment-rolling-update
+  labels:
+    app: simple-deployment-rolling-update
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 3
+  selector:
+    matchLabels:
+      app: simple-container
+  template:
+    metadata:
+      name: simple-container
+      labels:
+        app: simple-container
+    spec:
+      containers:
+        - name: simple-container
+          image: kaizernurik/hw2mlops:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+          - name: MLOPS_HW2_MODEL_FILE_ID
+            value: "1B1BvfrkKKimI0kTxYVgXwOMG3zHhsptC"
+
