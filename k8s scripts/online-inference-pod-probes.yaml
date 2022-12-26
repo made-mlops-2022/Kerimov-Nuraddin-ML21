@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: probes-pod
+  labels:
+    app: probes-pod
+spec:
+  containers:
+    - name: probes-container
+      image: kaizernurik/hw2mlops:v2
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 8000
+      env:
+      - name: MLOPS_HW2_MODEL_FILE_ID
+        value: "1B1BvfrkKKimI0kTxYVgXwOMG3zHhsptC"
+      resources:
+        requests:
+          memory: "500Mi"
+          cpu: 1
+        limits:
+          memory: "1024Mi"
+          cpu: 1
+      readinessProbe:
+        httpGet:
+          path: /health
+          port: 8000
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        failureThreshold: 5
+      livenessProbe:
+        httpGet:
+          path: /health
+          port: 8000
+        initialDelaySeconds: 30
+        periodSeconds: 10

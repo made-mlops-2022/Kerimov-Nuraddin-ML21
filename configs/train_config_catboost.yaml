@@ -1,0 +1,57 @@
+input_data_path: "data/raw/train.csv"
+output_model_path: "models/model.pkl"
+metric_path: "models/metrics.json"
+download_data: True
+downloading_params:
+    path: './data/raw'
+    csv: 'heart_cleveland_upload.csv'
+    file_id: '1q2ehxJdWkP-ak84wIc6GWRhCC3bgSTC4'
+    zip_path: 'data.zip'
+    url: 'https://docs.google.com/uc?export=download'
+downloading_params_s3:
+  s3_bucket: for-dvc
+  paths:
+    - train.csv
+    - test.csv
+  output_folder: "data/raw/"
+splitting_params:
+  val_size: 0.2
+  random_state: 3
+train_params:
+  model_type: "CatBoostClassifier"
+  iterations: 400
+  random_state: 255
+  random_seed: 42
+  learning_rate: 0.005
+  custom_loss: 
+    - 'AUC'
+    - 'Accuracy'
+    - 'Recall'
+  use_best_model: True
+  cat_features: 
+    - 1
+    - 2
+    - 5
+    - 6
+    - 8
+    - 10
+    - 12
+feature_params:
+  categorical_features:
+    - "sex"
+    - "cp"
+    - "fbs"
+    - "restecg"
+    - "exang"
+    - "slope"
+    - "thal"
+  numerical_features:
+    - "age"
+    - "trestbps"
+    - "chol"
+    - "thalach"
+    - "oldpeak"
+    - "ca" 
+  features_to_drop: NULL
+  target_col: "condition"
+  for_catboost: True

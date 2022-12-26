@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: replica-replicaset
+  labels:
+    app: replica-replicaset
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: replica-container
+  template:
+    metadata:
+      name: replica-container
+      labels:
+        app: replica-container
+    spec:
+      containers:
+        - name: replica-container
+          image: kaizernurik/hw2mlops:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+          - name: MLOPS_HW2_MODEL_FILE_ID
+            value: "1B1BvfrkKKimI0kTxYVgXwOMG3zHhsptC"
+          resources:
+            requests:
+                memory: "500Mi"
+                cpu: 1
+            limits:
+                memory: "1024Mi"
+                cpu: 1
+
